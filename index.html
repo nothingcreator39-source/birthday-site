@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Birthday Surprise ❤️</title>
+
+<style>
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Segoe UI',sans-serif;
+}
+
+body{
+background:linear-gradient(to bottom,#000428,#004e92);
+overflow:hidden;
+height:100vh;
+display:flex;
+justify-content:center;
+align-items:center;
+color:white;
+}
+
+.password-screen{
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    background:rgba(0,0,0,0.95);
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    z-index:9999;
+}
+
+.password-box{
+    background:rgba(255,255,255,0.08);
+    border:2px solid white;
+    border-radius:25px;
+    padding:30px;
+    text-align:center;
+    box-shadow:0 0 25px rgba(255,255,255,0.3);
+}
+
+.password-box input{
+    width:220px;
+    padding:12px;
+    border-radius:25px;
+    border:2px solid white;
+    background:transparent;
+    color:white;
+    text-align:center;
+    margin-top:15px;
+}
+
+.password-box button{
+    margin-top:15px;
+    padding:10px 20px;
+    border:none;
+    border-radius:20px;
+    background:#ff4fa3;
+    color:white;
+    cursor:pointer;
+}
+
+#errorText{
+    color:pink;
+    margin-top:10px;
+}
+
+.container{
+width:100%;
+max-width:400px;
+height:100vh;
+position:relative;
+overflow:hidden;
+text-align:center;
+}
+
+.scene{
+position:absolute;
+width:100%;
+height:100%;
+display:none;
+flex-direction:column;
+justify-content:center;
+align-items:center;
+padding:20px;
+animation:fadeIn 1s ease;
+}
+
+.active{
+display:flex;
+}
+
+.card{
+background:rgba(0,0,0,0.7);
+padding:25px;
+border-radius:25px;
+border:2px solid white;
+box-shadow:0 0 20px rgba(255,255,255,0.4);
+width:90%;
+}
+
+input{
+width:90%;
+padding:15px;
+border-radius:30px;
+border:2px solid white;
+background:black;
+color:white;
+font-size:18px;
+margin:20px 0;
+text-align:center;
+}
+
+button{
+  margin-top: 20px;
+padding:12px 25px;
+border:none;
+border-radius:30px;
+background:#ff4fd8;
+color:white;
+font-size:18px;
+cursor:pointer;
+}
+
+img.profile{
+width:140px;
+height:140px;
+border-radius:50%;
+border:4px solid white;
+box-shadow:0 0 20px pink;
+object-fit:cover;
+}
+
+.gift{
+font-size:80px;
+cursor:pointer;
+animation:bounce 1s infinite;
+}
+
+.memory-wrapper{
+width:100%;
+overflow:hidden;
+margin-top:20px;
+}
+
+.memory{
+display:flex;
+gap:15px;
+width:max-content;
+animation:scrollMemory 12s linear infinite;
+}
+
+.memory img{
+width:120px;
+height:160px;
+border-radius:15px;
+object-fit:cover;
+}
+
+.emoji{
+margin-top:20px;
+font-size:30px;
+animation:floatEmoji 2s infinite alternate;
+}
+
+.music-btn{
+position:absolute;
+top:20px;
+right:20px;
+background:white;
+color:black;
+border-radius:50%;
+width:50px;
+height:50px;
+}
+
+@keyframes fadeIn{
+from{opacity:0}
+to{opacity:1}
+}
+
+@keyframes bounce{
+0%,100%{transform:translateY(0)}
+50%{transform:translateY(-10px)}
+}
+
+@keyframes scrollMemory{
+0%{transform:translateX(0);}
+100%{transform:translateX(-50%);}
+}
+
+@keyframes floatEmoji{
+from{transform:translateY(0);}
+to{transform:translateY(-15px);}
+}
+</style>
+</head>
+
+<body>
+  <div id="passwordScreen" class="password-screen">
+    <div class="password-box">
+        <h2>Secret Entry 🔐💖</h2>
+        <p>Enter our secret password</p>
+        <input type="password" id="passwordInput" placeholder="Enter password">
+        <button onclick="checkPassword()">Open Surprise</button>
+        <p id="errorText"></p>
+    </div>
+</div>
+
+<div class="container">
+
+<audio id="music" loop>
+<source src="photos/interlude.mp3" type="audio/mpeg">
+</audio>
+
+<button class="music-btn" onclick="toggleMusic()">🎵</button>
+
+<!-- Scene 0 Name Input -->
+<div class="scene active" id="scene0">
+<div class="card">
+<h2>Enter Your Name 👋💗</h2>
+<input type="text" id="username" placeholder="Type here">
+<button onclick="saveName()">OK</button>
+</div>
+</div>
+
+<!-- Scene 1 -->
+<div class="scene" id="scene1">
+<img src="photos/swathika10.png" class="profile">
+<button onclick="nextScene(2)">Tap Here ❤️</button>
+</div>
+
+<!-- Scene 2 -->
+<div class="scene" id="scene2">
+<div class="card" id="slideCard">
+<img src="photos/swathika2.png" class="profile">
+<h2>Hello <span class="name"></span> ❤️✨</h2>
+<p>Slide left 👉</p>
+</div>
+</div>
+
+<!-- Scene 3 -->
+<div class="scene" id="scene3">
+<div class="gift" onclick="nextScene(4)">🎁</div>
+<p>This is for you <span class="name"></span> 🤗</p>
+</div>
+
+<!-- Scene 4 -->
+<div class="scene" id="scene4">
+<div class="card">
+<img src="photos/swathika2.png" class="profile">
+<p>
+Happy birthday <span class="name"></span> ❤️<br><br>
+Wishing you a long life and always stay sweet.<br><br>
+The world can be tiring sometimes, but you must keep your spirit up!
+</p>
+<button onclick="nextScene(5)">Next ❤️</button>
+</div>
+</div>
+
+<!-- Scene 5 -->
+<div class="scene" id="scene5">
+<h2> Captures of my angel 📸❤️</h2>
+<div class="memory-wrapper">
+<div class="memory">
+<img src="photos/Swathika 1.png">
+<img src="photos/swathika3.png">
+<img src="photos/swathika4.png">
+<img src="photos/swathika5.jpg">
+<img src="photos/Swathika7.png">
+<img src="photos/Swathika8.png">
+<img src="photos/Swathika9.png">
+</div>
+</div>
+<button onclick="nextScene(6)">Final ❤️</button>
+</div>
+
+<!-- Scene 6 -->
+<div class="scene" id="scene6">
+<div class="card">
+<h2>Wish You All The Best <span class="name"></span> 🎂</h2>
+<p>No matter how many birthdays come,
+I just want to see your smile stay the same forever 💖 🎉💐</p>
+<div class="emoji">❤️ 💖 🎈 ✨ 🌸 💕 🩵</div>
+</div>
+</div>
+
+</div>
+
+<script>
+let startX=0;
+
+function saveName(){
+let user=document.getElementById('username').value;
+if(user.trim()=="") return;
+
+document.querySelectorAll('.name').forEach(el=>{
+el.textContent=user;
+});
+
+nextScene(1);
+}
+
+function nextScene(num){
+document.querySelectorAll('.scene').forEach(scene=>scene.classList.remove('active'));
+document.getElementById('scene'+num).classList.add('active');
+document.getElementById('music').play();
+}
+
+function toggleMusic(){
+const music=document.getElementById('music');
+if(music.paused){
+music.play();
+}else{
+music.pause();
+}
+}
+
+document.addEventListener('DOMContentLoaded',()=>{
+const card=document.getElementById('slideCard');
+
+card.addEventListener('touchstart',e=>{
+startX=e.touches[0].clientX;
+});
+
+card.addEventListener('touchend',e=>{
+let endX=e.changedTouches[0].clientX;
+
+if(startX-endX>50){
+nextScene(3);
+}
+});
+});
+function checkPassword(){
+    const password = document.getElementById("passwordInput").value;
+
+    if(password === "2903"){
+        document.getElementById("passwordScreen").style.display = "none";
+    } else {
+        document.getElementById("errorText").innerText = "Wrong password 💔 Try again";
+    }
+}
+</script>
+
+</body>
+</html>
